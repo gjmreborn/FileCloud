@@ -1,0 +1,4 @@
+// TODO: Fix this bug: if somebody uploads a file, he doesn't seem on form that the file was already chosen - UX is bad
+// TODO: Rewrite unit tests!
+// TODO: Do the proffesional access denied page in access_denied.html
+// TODO: Write some simple text editor in JS that will allow users to edit their text files (with text/* MIME type)

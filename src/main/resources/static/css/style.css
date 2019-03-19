@@ -1,0 +1,62 @@
+.center {
+    width: 1000px;
+    height: 500px;
+    position: center;
+    border: 2px solid grey;
+}
+
+.center p {
+    margin: 0;
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+}
+
+.btnDownload {
+    position: absolute !important;
+    right: 35px !important;
+    top: 5px !important;
+}
+
+.btnDelete {
+    position: absolute !important;
+    right: 5px !important;
+    top: 5px !important;
+}
+
+.hyperlink-fc {
+    color: white !important;
+}
+
+.fileListDiv {
+    height: 100% !important;
+    position: relative !important;
+}
+
+.fileListScroll {
+    height: 90% !important;
+    overflow-y: scroll !important;
+}
+
+.fileListTextAlign {
+    text-align: left !important;
+}
+
+.fileCountDiv {
+    height: 10% !important;
+    position: absolute !important;
+    bottom: 0 !important;
+}
+
+.getAllFilesInZipDivOuter {
+    height: 0 !important;
+    position: relative !important;
+}
+
+.getAllFilesInZipDivInner {
+    position: absolute !important;
+    height: 0 !important;
+    bottom: 50px !important;
+    right: 0 !important;
+}
