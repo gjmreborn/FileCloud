@@ -7,4 +7,7 @@ public class PagingInfo {
     private int numberOfPages;
     private int recordsPerPage;
     private int totalRecords;
+
+    public PagingInfo() {
+    }
 }
