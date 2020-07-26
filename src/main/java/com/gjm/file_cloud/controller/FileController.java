@@ -10,7 +10,6 @@ import org.springframework.web.multipart.MultipartFile;
 
 import java.util.Base64;
 import java.util.List;
-import java.util.Locale;
 
 @RestController
 @RequestMapping("/api")
@@ -23,37 +22,37 @@ public class FileController {
     }
 
     @PostMapping("/file")
-    public ResponseEntity addFile(@RequestParam("file") MultipartFile file, Locale locale) {
-        fileService.addFile(file, locale);
+    public ResponseEntity addFile(@RequestParam("file") MultipartFile file) {
+        fileService.addFile(file);
 
         String savedFilename = file.getOriginalFilename();
         return createResponseEntity(HttpStatus.CREATED, savedFilename);
     }
 
     @GetMapping("/file")
-    public ResponseEntity getFile(@RequestParam("name") String name, Locale locale) {
-        File fetchedFile = fileService.getFileByName(name, locale);
+    public ResponseEntity getFile(@RequestParam("name") String name) {
+        File fetchedFile = fileService.getFileByName(name);
 
         return createResponseEntity(HttpStatus.OK, fetchedFile);
     }
 
     @DeleteMapping("/file")
-    public ResponseEntity deleteFile(@RequestParam("name") String name, Locale locale) {
-        fileService.deleteFile(name, locale);
+    public ResponseEntity deleteFile(@RequestParam("name") String name) {
+        fileService.deleteFile(name);
 
         return createResponseEntity(HttpStatus.OK, name);
     }
 
     @GetMapping("/files/names")
-    public ResponseEntity getFileNames(Locale locale) {
-        List<String> fileNames = fileService.getFileNames(locale);
+    public ResponseEntity getFileNames() {
+        List<String> fileNames = fileService.getFileNames();
 
         return createResponseEntity(HttpStatus.OK, fileNames);
     }
 
     @GetMapping("/files/zip")
-    public ResponseEntity getAllFilesInZip(Locale locale) {
-        byte[] zipArchiveInBase64 = Base64.getEncoder().encode(fileService.getAllFilesInZip(locale));
+    public ResponseEntity getAllFilesInZip() {
+        byte[] zipArchiveInBase64 = Base64.getEncoder().encode(fileService.getAllFilesInZip());
 
         return createResponseEntity(HttpStatus.OK, zipArchiveInBase64);
     }

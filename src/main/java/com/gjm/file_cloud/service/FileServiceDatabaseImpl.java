@@ -19,13 +19,11 @@ import javax.transaction.Transactional;
 import java.io.ByteArrayOutputStream;
 import java.io.IOException;
 import java.util.List;
-import java.util.Locale;
 import java.util.stream.Collectors;
 import java.util.zip.ZipEntry;
 import java.util.zip.ZipOutputStream;
 
 @Service
-@Profile("database-version")
 @Transactional
 public class FileServiceDatabaseImpl implements FileService {
     private FileDao fileDao;
@@ -43,11 +41,11 @@ public class FileServiceDatabaseImpl implements FileService {
     }
 
     @Override
-    public void addFile(MultipartFile file, Locale locale) {
+    public void addFile(MultipartFile file) {
         String username = authenticationService.getUsernameOfLoggedInUser();
 
         try {
-            getFileByName(file.getOriginalFilename(), locale);
+            getFileByName(file.getOriginalFilename());
 
             // without exception = file already exist
             throw new FileDuplicationException("There is already " + file.getOriginalFilename() + " file!");
@@ -57,7 +55,7 @@ public class FileServiceDatabaseImpl implements FileService {
                         file.getContentType(),
                         file.getBytes()
                 );
-                fileValidator.validateFileEntity(fileToSave, locale);
+                fileValidator.validateFileEntity(fileToSave);
 
                 fileDao.save(fileToSave);
 
@@ -77,10 +75,10 @@ public class FileServiceDatabaseImpl implements FileService {
     }
 
     @Override
-    public void deleteFile(String name, Locale locale) {
+    public void deleteFile(String name) {
         String username = authenticationService.getUsernameOfLoggedInUser();
 
-        File fileToDelete = getFileByName(name, locale);
+        File fileToDelete = getFileByName(name);
         User currentUser = userDao.findByUsername(username);
 
         List<File> userFiles = currentUser.getFiles();
@@ -94,7 +92,7 @@ public class FileServiceDatabaseImpl implements FileService {
     }
 
     @Override
-    public File getFileByName(String name, Locale locale) {
+    public File getFileByName(String name) {
         String username = authenticationService.getUsernameOfLoggedInUser();
 
         List<File> foundFile = userDao.findByUsername(username).getFiles()
@@ -111,7 +109,7 @@ public class FileServiceDatabaseImpl implements FileService {
     }
 
     @Override
-    public List<String> getFileNames(Locale locale) {
+    public List<String> getFileNames() {
         String username = authenticationService.getUsernameOfLoggedInUser();
 
         List<String> names = userDao.findByUsername(username).getFiles()
@@ -128,7 +126,7 @@ public class FileServiceDatabaseImpl implements FileService {
     }
 
     @Override
-    public byte[] getAllFilesInZip(Locale locale) {
+    public byte[] getAllFilesInZip() {
         String username = authenticationService.getUsernameOfLoggedInUser();
 
         List<File> files = userDao.findByUsername(username).getFiles();
@@ -158,12 +156,12 @@ public class FileServiceDatabaseImpl implements FileService {
     }
 
     @Override
-    public List<String> getFileNamesPaged(int pageNumber, Locale locale) {
+    public List<String> getFileNamesPaged(int pageNumber) {
         if(pageNumber < 1) {
             throw new FilePagingException("Page number out of bounds (" + pageNumber + ")!");
         }
 
-        List<String> fileNames = getFileNames(locale);
+        List<String> fileNames = getFileNames();
 
         PagingInfo pagingInfo = getFilePagingInfo(fileNames.size());
         int pageIndex = pageNumber - 1;
@@ -182,8 +180,8 @@ public class FileServiceDatabaseImpl implements FileService {
     }
 
     @Override
-    public PagingInfo getFilePagingInfo(Locale locale) {
-        return getFilePagingInfo(getFileNames(locale).size());
+    public PagingInfo getFilePagingInfo() {
+        return getFilePagingInfo(getFileNames().size());
     }
 
     public PagingInfo getFilePagingInfo(int countOfRecords) {

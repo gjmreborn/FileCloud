@@ -5,16 +5,15 @@ import com.gjm.file_cloud.entity.PagingInfo;
 import org.springframework.web.multipart.MultipartFile;
 
 import java.util.List;
-import java.util.Locale;
 
 public interface FileService {
-    void addFile(MultipartFile file, Locale locale);
+    void addFile(MultipartFile file);
 
-    File getFileByName(String name, Locale locale);
-    List<String> getFileNames(Locale locale);
-    byte[] getAllFilesInZip(Locale locale);
-    List<String> getFileNamesPaged(int pageNumber, Locale locale);
-    PagingInfo getFilePagingInfo(Locale locale);
+    File getFileByName(String name);
+    List<String> getFileNames();
+    byte[] getAllFilesInZip();
+    List<String> getFileNamesPaged(int pageNumber);
+    PagingInfo getFilePagingInfo();
 
-    void deleteFile(String name, Locale locale);
+    void deleteFile(String name);
 }

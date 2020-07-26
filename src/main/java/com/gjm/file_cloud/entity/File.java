@@ -15,17 +15,17 @@ public class File {
     @Column(name = "file_id")
     private long id;
 
-    @NotNull(message = "file_cloud.messages.validation.name.not_null")
-    @NotEmpty(message = "file_cloud.messages.validation.name.not_empty")
+    @NotNull(message = "You must provide file name")
+    @NotEmpty(message = "File name can't be empty")
     private String name;
 
-    @NotNull(message = "file_cloud.messages.validation.type.not_null")
-    @NotEmpty(message = "file_cloud.messages.validation.type.not_empty")
+    @NotNull(message = "You must provide file type")
+    @NotEmpty(message = "File type can't be empty")
     private String type;
 
     @Lob
-    @NotNull(message = "file_cloud.messages.validation.bytes.not_null")
-    @NotEmpty(message = "file_cloud.messages.validation.bytes.not_empty")
+    @NotNull(message = "You must provide file content")
+    @NotEmpty(message = "File content can't be empty")
     private byte[] bytes;
 
     public File() {

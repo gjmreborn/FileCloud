@@ -11,7 +11,6 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import java.util.List;
-import java.util.Locale;
 
 import static com.gjm.file_cloud.controller.FileController.createResponseEntity;
 
@@ -26,15 +25,15 @@ public class FilePagingController {
     }
 
     @GetMapping("/files/names/paged/{pageNumber}")
-    public ResponseEntity getFileNamesPaged(@PathVariable("pageNumber") int pageNumber, Locale locale) {
-        List<String> fileNamesPaged = fileService.getFileNamesPaged(pageNumber, locale);
+    public ResponseEntity getFileNamesPaged(@PathVariable("pageNumber") int pageNumber) {
+        List<String> fileNamesPaged = fileService.getFileNamesPaged(pageNumber);
 
         return createResponseEntity(HttpStatus.OK, fileNamesPaged);
     }
 
     @GetMapping("/files/paging")
-    public ResponseEntity getFilePagingInfo(Locale locale) {
-        PagingInfo pagingInfo = fileService.getFilePagingInfo(locale);
+    public ResponseEntity getFilePagingInfo() {
+        PagingInfo pagingInfo = fileService.getFilePagingInfo();
 
         return createResponseEntity(HttpStatus.OK, pagingInfo);
     }
