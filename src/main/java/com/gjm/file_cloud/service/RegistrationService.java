@@ -37,7 +37,6 @@ public class RegistrationService {
         User user = new User(
                 username,
                 passwordEncoder.encode(password),
-                true,
                 Collections.singletonList(roleUser),
                 Collections.emptyList()
         );

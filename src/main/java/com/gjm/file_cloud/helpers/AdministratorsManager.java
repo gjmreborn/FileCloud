@@ -4,13 +4,11 @@ import com.gjm.file_cloud.dao.RoleDao;
 import com.gjm.file_cloud.dao.UserDao;
 import com.gjm.file_cloud.entity.Role;
 import com.gjm.file_cloud.entity.User;
-import com.gjm.file_cloud.exceptions.RegistrationException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Component;
 
 import javax.annotation.PostConstruct;
-import java.util.Arrays;
 import java.util.Collections;
 
 @Component
@@ -37,7 +35,6 @@ public class AdministratorsManager {
             User adminUser = new User(
                     "gjm_admin",
                     passwordEncoder.encode("admin"),
-                    true,
                     Collections.singletonList(adminRole),
                     Collections.emptyList()
             );
