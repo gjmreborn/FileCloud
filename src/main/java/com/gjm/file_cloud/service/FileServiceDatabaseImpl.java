@@ -3,15 +3,14 @@ package com.gjm.file_cloud.service;
 import com.gjm.file_cloud.dao.FileDao;
 import com.gjm.file_cloud.dao.UserDao;
 import com.gjm.file_cloud.entity.File;
-import com.gjm.file_cloud.entity.PagingInfo;
 import com.gjm.file_cloud.entity.User;
 import com.gjm.file_cloud.exceptions.file_cloud_runtime_exception.FileDoesntExistException;
 import com.gjm.file_cloud.exceptions.file_cloud_runtime_exception.FileDuplicationException;
-import com.gjm.file_cloud.exceptions.file_cloud_runtime_exception.FilePagingException;
 import com.gjm.file_cloud.exceptions.file_cloud_runtime_exception.NoFilesException;
 import com.gjm.file_cloud.validator.FileValidator;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.context.annotation.Profile;
+import lombok.RequiredArgsConstructor;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 
@@ -25,20 +24,13 @@ import java.util.zip.ZipOutputStream;
 
 @Service
 @Transactional
+@RequiredArgsConstructor
 public class FileServiceDatabaseImpl implements FileService {
-    private FileDao fileDao;
-    private UserDao userDao;
+    private final FileDao fileDao;
+    private final UserDao userDao;
 
-    private AuthenticationService authenticationService;
-    private FileValidator fileValidator;
-
-    @Autowired
-    public FileServiceDatabaseImpl(FileDao fileDao, UserDao userDao, AuthenticationService authenticationService, FileValidator fileValidator) {
-        this.fileDao = fileDao;
-        this.userDao = userDao;
-        this.authenticationService = authenticationService;
-        this.fileValidator = fileValidator;
-    }
+    private final AuthenticationService authenticationService;
+    private final FileValidator fileValidator;
 
     @Override
     public void addFile(MultipartFile file) {
@@ -72,6 +64,14 @@ public class FileServiceDatabaseImpl implements FileService {
                 throw new IllegalArgumentException("Can't extract bytes from uploaded file!");
             }
         }
+    }
+
+    @Override
+    public Page<File> getFiles(int pageNumber) {
+        return fileDao.findFilesByOwnerName(
+                authenticationService.getUsernameOfLoggedInUser(),
+                PageRequest.of(pageNumber - 1, 5)
+        );
     }
 
     @Override
@@ -126,7 +126,7 @@ public class FileServiceDatabaseImpl implements FileService {
     }
 
     @Override
-    public byte[] getAllFilesInZip() {
+    public byte[] getZippedFiles() {
         String username = authenticationService.getUsernameOfLoggedInUser();
 
         List<File> files = userDao.findByUsername(username).getFiles();
@@ -157,42 +157,19 @@ public class FileServiceDatabaseImpl implements FileService {
 
     @Override
     public List<String> getFileNamesPaged(int pageNumber) {
-        if(pageNumber < 1) {
-            throw new FilePagingException("Page number out of bounds (" + pageNumber + ")!");
-        }
-
-        List<String> fileNames = getFileNames();
-
-        PagingInfo pagingInfo = getFilePagingInfo(fileNames.size());
-        int pageIndex = pageNumber - 1;
-
-        int startRecordIndex = pageIndex * pagingInfo.getRecordsPerPage();
-        if(startRecordIndex >= fileNames.size()) {
-            throw new FilePagingException("Too much records selected!");
-        }
-
-        // <a; b)
-        if(startRecordIndex + pagingInfo.getRecordsPerPage() >= fileNames.size()) {
-            return fileNames.subList(startRecordIndex, fileNames.size());
-        }
-
-        return fileNames.subList(startRecordIndex, startRecordIndex + pagingInfo.getRecordsPerPage());
+        return fileDao.findFilesByOwnerName(
+                authenticationService.getUsernameOfLoggedInUser(),
+                PageRequest.of(pageNumber - 1, 5)
+        )
+                .stream()
+                .map(File::getName)
+                .collect(Collectors.toList());
     }
 
     @Override
-    public PagingInfo getFilePagingInfo() {
-        return getFilePagingInfo(getFileNames().size());
-    }
-
-    public PagingInfo getFilePagingInfo(int countOfRecords) {
-        PagingInfo pagingInfo = new PagingInfo();
-
-        pagingInfo.setRecordsPerPage(5);
-        pagingInfo.setTotalRecords(countOfRecords);
-        pagingInfo.setNumberOfPages(
-                (int) Math.ceil((((double)pagingInfo.getTotalRecords()) / pagingInfo.getRecordsPerPage()))
-        );
-
-        return pagingInfo;
+    public int getPagesCount() {
+        return (int) Math.ceil(userDao.findByUsername(authenticationService.getUsernameOfLoggedInUser())
+                .getFiles()
+                .size() / 5.0);
     }
 }

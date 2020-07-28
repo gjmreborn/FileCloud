@@ -1,7 +1,7 @@
 package com.gjm.file_cloud.service;
 
 import com.gjm.file_cloud.entity.File;
-import com.gjm.file_cloud.entity.PagingInfo;
+import org.springframework.data.domain.Page;
 import org.springframework.web.multipart.MultipartFile;
 
 import java.util.List;
@@ -9,11 +9,12 @@ import java.util.List;
 public interface FileService {
     void addFile(MultipartFile file);
 
-    File getFileByName(String name);
+    Page<File> getFiles(int pageNumber);
     List<String> getFileNames();
-    byte[] getAllFilesInZip();
     List<String> getFileNamesPaged(int pageNumber);
-    PagingInfo getFilePagingInfo();
+    File getFileByName(String name);
+    byte[] getZippedFiles();
+    int getPagesCount();
 
     void deleteFile(String name);
 }

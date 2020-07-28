@@ -61,9 +61,7 @@ updatePagingButtons = () => {
                 return;
             }
 
-            let pagingData = response.data;
-
-            if(pagingData.numberOfPages <= currentPageNumber) {
+            if(response.data <= currentPageNumber) {
                 // hide
                 htmlElements.nextPageButton.attr("disabled", true);
             } else {

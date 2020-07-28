@@ -28,6 +28,10 @@ public class File {
     @NotEmpty(message = "File content can't be empty")
     private byte[] bytes;
 
+    @ManyToOne
+    @JoinColumn(name = "user_id")
+    private User owner;
+
     public File() {
     }
 

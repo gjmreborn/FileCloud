@@ -2,7 +2,7 @@ package com.gjm.file_cloud.controller;
 
 import com.gjm.file_cloud.entity.File;
 import com.gjm.file_cloud.service.FileService;
-import org.springframework.beans.factory.annotation.Autowired;
+import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -13,53 +13,37 @@ import java.util.List;
 
 @RestController
 @RequestMapping("/api")
+@RequiredArgsConstructor
 public class FileController {
-    private FileService fileService;
-
-    @Autowired
-    public FileController(FileService fileService) {
-        this.fileService = fileService;
-    }
+    private final FileService fileService;
 
     @PostMapping("/file")
-    public ResponseEntity addFile(@RequestParam("file") MultipartFile file) {
+    public ResponseEntity<String> addFile(@RequestParam("file") MultipartFile file) {
         fileService.addFile(file);
 
-        String savedFilename = file.getOriginalFilename();
-        return createResponseEntity(HttpStatus.CREATED, savedFilename);
+        return new ResponseEntity<>(file.getOriginalFilename(), HttpStatus.CREATED);
     }
 
     @GetMapping("/file")
-    public ResponseEntity getFile(@RequestParam("name") String name) {
-        File fetchedFile = fileService.getFileByName(name);
-
-        return createResponseEntity(HttpStatus.OK, fetchedFile);
+    public File getFile(@RequestParam("name") String name) {
+        return fileService.getFileByName(name);
     }
 
     @DeleteMapping("/file")
-    public ResponseEntity deleteFile(@RequestParam("name") String name) {
+    public String deleteFile(@RequestParam("name") String name) {
         fileService.deleteFile(name);
 
-        return createResponseEntity(HttpStatus.OK, name);
+        return name;
     }
 
     @GetMapping("/files/names")
-    public ResponseEntity getFileNames() {
-        List<String> fileNames = fileService.getFileNames();
-
-        return createResponseEntity(HttpStatus.OK, fileNames);
+    public List<String> getFileNames() {
+        return fileService.getFileNames();
     }
 
     @GetMapping("/files/zip")
-    public ResponseEntity getAllFilesInZip() {
-        byte[] zipArchiveInBase64 = Base64.getEncoder().encode(fileService.getAllFilesInZip());
-
-        return createResponseEntity(HttpStatus.OK, zipArchiveInBase64);
-    }
-
-    static ResponseEntity createResponseEntity(HttpStatus httpStatus, Object body) {
-        return ResponseEntity
-                .status(httpStatus)
-                .body(body);
+    public byte[] getAllFilesInZip() {
+        return Base64.getEncoder()
+                .encode(fileService.getZippedFiles());
     }
 }

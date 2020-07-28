@@ -27,7 +27,7 @@ public class User {
         inverseJoinColumns = @JoinColumn(name = "role_id"))
     private List<Role> roles;
 
-    @OneToMany
+    @OneToMany(mappedBy = "owner", cascade = CascadeType.ALL)
     private List<File> files;
 
     public User(String username, String password, boolean active, List<Role> roles, List<File> files) {
