@@ -2,12 +2,12 @@ package com.gjm.file_cloud.service;
 
 import com.gjm.file_cloud.entity.File;
 import org.springframework.data.domain.Page;
-import org.springframework.web.multipart.MultipartFile;
 
+import javax.validation.Valid;
 import java.util.List;
 
 public interface FileService {
-    void addFile(MultipartFile file);
+    void addFile(@Valid File file);
 
     Page<File> getFiles(int pageNumber);
     List<String> getFileNames();

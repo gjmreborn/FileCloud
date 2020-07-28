@@ -7,14 +7,13 @@ import com.gjm.file_cloud.entity.User;
 import com.gjm.file_cloud.exceptions.file_cloud_runtime_exception.FileDoesntExistException;
 import com.gjm.file_cloud.exceptions.file_cloud_runtime_exception.FileDuplicationException;
 import com.gjm.file_cloud.exceptions.file_cloud_runtime_exception.NoFilesException;
-import com.gjm.file_cloud.validator.FileValidator;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.stereotype.Service;
-import org.springframework.web.multipart.MultipartFile;
 
 import javax.transaction.Transactional;
+import javax.validation.Valid;
 import java.io.ByteArrayOutputStream;
 import java.io.IOException;
 import java.util.List;
@@ -28,41 +27,27 @@ import java.util.zip.ZipOutputStream;
 public class FileServiceDatabaseImpl implements FileService {
     private final FileDao fileDao;
     private final UserDao userDao;
-
     private final AuthenticationService authenticationService;
-    private final FileValidator fileValidator;
 
     @Override
-    public void addFile(MultipartFile file) {
+    public void addFile(@Valid File file) {
         String username = authenticationService.getUsernameOfLoggedInUser();
 
         try {
-            getFileByName(file.getOriginalFilename());
-
-            // without exception = file already exist
-            throw new FileDuplicationException("There is already " + file.getOriginalFilename() + " file!");
+            getFileByName(file.getName());
+            throw new FileDuplicationException();
         } catch(FileDoesntExistException exc) {
-            try {
-                File fileToSave = new File(file.getOriginalFilename(),
-                        file.getContentType(),
-                        file.getBytes()
-                );
-                fileValidator.validateFileEntity(fileToSave);
+            fileDao.save(file);
 
-                fileDao.save(fileToSave);
+            User currentUser = userDao.findByUsername(username);
 
-                User currentUser = userDao.findByUsername(username);
+            // update user's files
+            List<File> userFiles = currentUser.getFiles();
+            userFiles.add(file);
+            currentUser.setFiles(userFiles);
 
-                // update user's files
-                List<File> userFiles = currentUser.getFiles();
-                userFiles.add(fileToSave);
-                currentUser.setFiles(userFiles);
-
-                // update user to new files (old files with new added)
-                userDao.save(currentUser);      // update operation (ID stays the same)
-            } catch(IOException exc1) {
-                throw new IllegalArgumentException("Can't extract bytes from uploaded file!");
-            }
+            // update user to new files (old files with new added)
+            userDao.save(currentUser);      // update operation (ID stays the same)
         }
     }
 
@@ -102,7 +87,8 @@ public class FileServiceDatabaseImpl implements FileService {
                 .collect(Collectors.toList());
 
         if(foundFile.isEmpty()) {
-            throw new FileDoesntExistException("File " + name + " doesn't exist!");
+//            throw new FileDoesntExistException("File " + name + " doesn't exist!");
+            throw new FileDoesntExistException();
         } else {
             return foundFile.get(0);
         }
@@ -119,7 +105,8 @@ public class FileServiceDatabaseImpl implements FileService {
                 .collect(Collectors.toList());
 
         if(names.isEmpty()) {
-            throw new NoFilesException("No files stored in FileCloud!");
+//            throw new NoFilesException("No files stored in FileCloud!");
+            throw new NoFilesException();
         } else {
             return names;
         }
@@ -145,7 +132,8 @@ public class FileServiceDatabaseImpl implements FileService {
             byte[] resultByteArray = bos.toByteArray();
 
             if(resultByteArray.length == 0) {
-                throw new NoFilesException("No files stored in FileCloud!");
+//                throw new NoFilesException("No files stored in FileCloud!");
+                throw new NoFilesException();
             } else {
                 return resultByteArray;
             }

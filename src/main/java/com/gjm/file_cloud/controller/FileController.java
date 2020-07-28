@@ -18,8 +18,8 @@ public class FileController {
     private final FileService fileService;
 
     @PostMapping("/file")
-    public ResponseEntity<String> addFile(@RequestParam("file") MultipartFile file) {
-        fileService.addFile(file);
+    public ResponseEntity<String> addFile(@RequestParam("file") MultipartFile file) throws Exception {
+        fileService.addFile(new File(file.getOriginalFilename(), file.getContentType(), file.getBytes()));
 
         return new ResponseEntity<>(file.getOriginalFilename(), HttpStatus.CREATED);
     }
