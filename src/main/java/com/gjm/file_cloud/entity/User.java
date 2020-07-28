@@ -19,8 +19,6 @@ public class User {
 
     private String password;
 
-    private boolean active;
-
     @ManyToMany
     @JoinTable(name = "user_role",
         joinColumns = @JoinColumn(name = "user_id"),
@@ -30,16 +28,15 @@ public class User {
     @OneToMany(mappedBy = "owner", cascade = CascadeType.ALL)
     private List<File> files;
 
-    public User(String username, String password, boolean active, List<Role> roles, List<File> files) {
+    public User(String username, String password, List<Role> roles, List<File> files) {
         this.username = username;
         this.password = password;
-        this.active = active;
         this.roles = roles;
         this.files = files;
     }
 
     public User(String username, String password) {
-        this(username, password, false, null, null);
+        this(username, password, null, null);
     }
 
     public User() {
