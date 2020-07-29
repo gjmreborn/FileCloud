@@ -3,6 +3,8 @@ package com.gjm.file_cloud.entity;
 import lombok.Data;
 
 import javax.persistence.*;
+import javax.validation.constraints.NotEmpty;
+import javax.validation.constraints.NotNull;
 import java.util.List;
 
 @Entity
@@ -14,9 +16,13 @@ public class User {
     @Column(name = "user_id")
     private Long id;
 
+    @NotNull(message = "You must provide user name")
+    @NotEmpty(message = "User name can't be empty")
     @Column(nullable = false, unique = true)
     private String username;
 
+    @NotNull(message = "You must provide password")
+    @NotEmpty(message = "Password can't be empty")
     private String password;
 
     @ManyToMany

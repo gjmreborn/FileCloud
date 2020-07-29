@@ -85,7 +85,7 @@ updatePagingButtons = () => {
 
 updateListOfFileNames = () => {
 // Download the freshest data about list of files from server
-    axios.get("/api/files/names/paged/" + currentPageNumber)
+    axios.get("/api/files/names/paged?page=" + currentPageNumber)
         .then(response => {
             if(response.status !== 204) {
                 $("#noFilesFoundParagraph").hide();
@@ -158,7 +158,7 @@ htmlElements.getAllFilesInZipButton.on("click", function() {
 htmlElements.fileList.on("click", "li button.btnDownload", function() {
     let fileName = $(this).attr("data-filename");
 
-    axios.get("/api/file", {
+    axios.get("/api/files", {
         params: {
             name: fileName
         }
@@ -186,7 +186,7 @@ htmlElements.fileList.on("click", "li button.btnDownload", function() {
 htmlElements.fileList.on("click", "li button.btnDelete", function() {
     let fileName = $(this).attr("data-filename");
 
-    axios.delete("/api/file", {
+    axios.delete("/api/files", {
         params: {
             name: fileName
         }
@@ -210,7 +210,7 @@ htmlElements.addFileForm.on("submit", function(event) {
     let formData = new FormData(htmlElements.addFileForm[0]);
     htmlElements.addFileForm[0].reset();
 
-    axios.post("/api/file", formData)
+    axios.post("/api/files", formData)
         .then(() => {
             addAlert("File uploaded!", "alert-success");
             updateListOfFileNames();

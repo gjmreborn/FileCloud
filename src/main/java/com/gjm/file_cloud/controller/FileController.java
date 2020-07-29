@@ -17,19 +17,19 @@ import java.util.List;
 public class FileController {
     private final FileService fileService;
 
-    @PostMapping("/file")
+    @PostMapping("/files")
     public ResponseEntity<String> addFile(@RequestParam("file") MultipartFile file) throws Exception {
         fileService.addFile(new File(file.getOriginalFilename(), file.getContentType(), file.getBytes()));
 
         return new ResponseEntity<>(file.getOriginalFilename(), HttpStatus.CREATED);
     }
 
-    @GetMapping("/file")
+    @GetMapping("/files")
     public File getFile(@RequestParam("name") String name) {
         return fileService.getFileByName(name);
     }
 
-    @DeleteMapping("/file")
+    @DeleteMapping("/files")
     public String deleteFile(@RequestParam("name") String name) {
         fileService.deleteFile(name);
 
@@ -45,5 +45,15 @@ public class FileController {
     public byte[] getAllFilesInZip() {
         return Base64.getEncoder()
                 .encode(fileService.getZippedFiles());
+    }
+
+    @GetMapping("/files/names/paged")
+    public List<String> getFileNamesPaged(@RequestParam("page") int page) {
+        return fileService.getFileNamesPaged(page);
+    }
+
+    @GetMapping("/files/paging")
+    public int getPagesCount() {
+        return fileService.getPagesCount();
     }
 }
