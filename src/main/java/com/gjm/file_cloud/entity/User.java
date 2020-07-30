@@ -31,7 +31,7 @@ public class User {
         inverseJoinColumns = @JoinColumn(name = "role_id"))
     private List<Role> roles;
 
-    @OneToMany(mappedBy = "owner", cascade = CascadeType.ALL)
+    @OneToMany(mappedBy = "owner", cascade = CascadeType.ALL, fetch = FetchType.EAGER)
     private List<File> files;
 
     public User(String username, String password, List<Role> roles, List<File> files) {
@@ -39,10 +39,6 @@ public class User {
         this.password = password;
         this.roles = roles;
         this.files = files;
-    }
-
-    public User(String username, String password) {
-        this(username, password, null, null);
     }
 
     public User() {
