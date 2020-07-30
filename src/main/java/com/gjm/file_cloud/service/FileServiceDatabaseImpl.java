@@ -65,7 +65,6 @@ public class FileServiceDatabaseImpl implements FileService {
 
     @Override
     public File getFileByName(String name) {
-        System.out.println(name);
         String username = authenticationService.getUsernameOfLoggedInUser();
 
         List<File> content = fileDao.findFilesByOwnerName(username, Pageable.unpaged())
