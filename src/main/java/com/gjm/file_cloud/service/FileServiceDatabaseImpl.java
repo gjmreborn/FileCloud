@@ -4,9 +4,9 @@ import com.gjm.file_cloud.dao.FileDao;
 import com.gjm.file_cloud.dao.UserDao;
 import com.gjm.file_cloud.entity.File;
 import com.gjm.file_cloud.entity.User;
-import com.gjm.file_cloud.exceptions.file_cloud_runtime_exception.FileDoesntExistException;
-import com.gjm.file_cloud.exceptions.file_cloud_runtime_exception.FileDuplicationException;
-import com.gjm.file_cloud.exceptions.file_cloud_runtime_exception.NoFilesException;
+import com.gjm.file_cloud.exceptions.http.FileDoesntExistException;
+import com.gjm.file_cloud.exceptions.http.FileDuplicationException;
+import com.gjm.file_cloud.exceptions.http.NoFilesException;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
@@ -39,7 +39,7 @@ public class FileServiceDatabaseImpl implements FileService {
         } catch(FileDoesntExistException exc) {
             fileDao.save(file);
 
-            User currentUser = userDao.findByUsername(username);
+            User currentUser = userDao.findByUsername(username).orElseThrow();
 
             // update user's files
             List<File> userFiles = currentUser.getFiles();
@@ -64,7 +64,7 @@ public class FileServiceDatabaseImpl implements FileService {
         String username = authenticationService.getUsernameOfLoggedInUser();
 
         File fileToDelete = getFileByName(name);
-        User currentUser = userDao.findByUsername(username);
+        User currentUser = userDao.findByUsername(username).orElseThrow();
 
         List<File> userFiles = currentUser.getFiles();
         userFiles.remove(fileToDelete);
@@ -80,7 +80,7 @@ public class FileServiceDatabaseImpl implements FileService {
     public File getFileByName(String name) {
         String username = authenticationService.getUsernameOfLoggedInUser();
 
-        List<File> foundFile = userDao.findByUsername(username).getFiles()
+        List<File> foundFile = userDao.findByUsername(username).orElseThrow().getFiles()
                 .stream()
                 .parallel()
                 .filter(file -> file.getName().equals(name))
@@ -98,7 +98,7 @@ public class FileServiceDatabaseImpl implements FileService {
     public List<String> getFileNames() {
         String username = authenticationService.getUsernameOfLoggedInUser();
 
-        List<String> names = userDao.findByUsername(username).getFiles()
+        List<String> names = userDao.findByUsername(username).orElseThrow().getFiles()
                 .stream()
                 .parallel()
                 .map(File::getName)
@@ -116,7 +116,7 @@ public class FileServiceDatabaseImpl implements FileService {
     public byte[] getZippedFiles() {
         String username = authenticationService.getUsernameOfLoggedInUser();
 
-        List<File> files = userDao.findByUsername(username).getFiles();
+        List<File> files = userDao.findByUsername(username).orElseThrow().getFiles();
 
         try(ByteArrayOutputStream bos = new ByteArrayOutputStream();
             ZipOutputStream zos = new ZipOutputStream(bos)) {
@@ -156,7 +156,7 @@ public class FileServiceDatabaseImpl implements FileService {
 
     @Override
     public int getPagesCount() {
-        return (int) Math.ceil(userDao.findByUsername(authenticationService.getUsernameOfLoggedInUser())
+        return (int) Math.ceil(userDao.findByUsername(authenticationService.getUsernameOfLoggedInUser()).orElseThrow()
                 .getFiles()
                 .size() / 5.0);
     }

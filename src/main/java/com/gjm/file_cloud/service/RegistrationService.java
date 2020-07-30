@@ -21,14 +21,12 @@ public class RegistrationService {
 
     public void registerUser(User user) {
         String username = user.getUsername();
-        if(userDao.findByUsername(username) != null) {
+        if(userDao.findByUsername(username).isPresent()) {
             throw new RegistrationException("User with name " + username + " already exists!");
         }
 
-        Role userRole = roleDao.findByRole("ROLE_USER");
-        if(userRole == null) {
-            userRole = roleDao.save(new Role("ROLE_USER"));
-        }
+        Role userRole = roleDao.findByRole("ROLE_USER")
+                .orElseGet(() -> roleDao.save(new Role("ROLE_USER")));
 
         user.setPassword(passwordEncoder.encode(user.getPassword()));
         user.setRoles(List.of(userRole));

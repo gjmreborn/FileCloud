@@ -12,7 +12,7 @@ import java.util.List;
 public class UserService {
     private final UserDao userDao;
 
-    public List<User> findAll() {
+    public List<User> findAllUsers() {
         return userDao.findAll();
     }
 }

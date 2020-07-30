@@ -51,7 +51,7 @@ public class UserController {
     @Secured({"ROLE_ADMIN"})
     public String adminDashboard(Model model) {
         model.addAttribute("loggedAdminUsername", authenticationService.getUsernameOfLoggedInUser());
-        model.addAttribute("users", userService.findAll());
+        model.addAttribute("users", userService.findAllUsers());
 
         return "admin_panel";
     }

@@ -1,6 +1,6 @@
 package com.gjm.file_cloud.configuration;
 
-import org.springframework.beans.factory.annotation.Autowired;
+import lombok.RequiredArgsConstructor;
 import org.springframework.context.annotation.Bean;
 import org.springframework.security.config.annotation.authentication.builders.AuthenticationManagerBuilder;
 import org.springframework.security.config.annotation.method.configuration.EnableGlobalMethodSecurity;
@@ -15,13 +15,9 @@ import javax.sql.DataSource;
 
 @EnableWebSecurity
 @EnableGlobalMethodSecurity(securedEnabled = true)
+@RequiredArgsConstructor
 public class SecurityConfiguration extends WebSecurityConfigurerAdapter {
-    private DataSource dataSource;
-
-    @Autowired
-    public SecurityConfiguration(DataSource dataSource) {
-        this.dataSource = dataSource;
-    }
+    private final DataSource dataSource;
 
     @Bean
     public PasswordEncoder passwordEncoder() {

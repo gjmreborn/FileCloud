@@ -9,14 +9,9 @@ import org.springframework.data.repository.query.Param;
 import org.springframework.stereotype.Repository;
 import org.springframework.transaction.annotation.Transactional;
 
-import java.util.Optional;
-
 @Repository
 @Transactional
 public interface FileDao extends JpaRepository<File, Long> {
-    void deleteFileByName(String name);
-    Optional<File> findFileByName(String name);
-
     @Query("SELECT f FROM File f WHERE f.owner.username = :username")
     Page<File> findFilesByOwnerName(@Param("username") String username, Pageable pageable);
 }
