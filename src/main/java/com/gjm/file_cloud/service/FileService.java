@@ -11,6 +11,7 @@ public interface FileService {
 
     Page<File> getFiles(int pageNumber);
     List<String> getFileNames();
+    long getFileCount();
     List<String> getFileNamesPaged(int pageNumber);
     File getFileByName(String name);
     byte[] getZippedFiles();

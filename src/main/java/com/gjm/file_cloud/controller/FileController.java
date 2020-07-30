@@ -41,6 +41,11 @@ public class FileController {
         return fileService.getFileNames();
     }
 
+    @GetMapping("/files/count")
+    public long getFileCount() {
+        return fileService.getFileCount();
+    }
+
     @GetMapping("/files/zip")
     public byte[] getAllFilesInZip() {
         return Base64.getEncoder()

@@ -28,7 +28,7 @@ public class UserController {
             registrationService.registerUser(user);
             model.addAttribute("registrationResponseMessage", "Successfully registered user " + user.getUsername());
         } catch(RegistrationException exc) {
-            model.addAttribute("registrationResponseMessage", exc.toString());
+            model.addAttribute("registrationResponseMessage", exc.getMessage());
         }
 
         return "index";

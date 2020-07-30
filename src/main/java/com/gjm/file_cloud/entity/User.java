@@ -25,6 +25,8 @@ public class User {
     @NotEmpty(message = "Password can't be empty")
     private String password;
 
+    private boolean active;
+
     @ManyToMany
     @JoinTable(name = "user_role",
         joinColumns = @JoinColumn(name = "user_id"),
@@ -39,8 +41,10 @@ public class User {
         this.password = password;
         this.roles = roles;
         this.files = files;
+        active = true;
     }
 
     public User() {
+        active = true;
     }
 }

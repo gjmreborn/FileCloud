@@ -1,5 +1,6 @@
 package com.gjm.file_cloud.entity;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import lombok.Data;
 
 import javax.persistence.*;
@@ -30,6 +31,7 @@ public class File {
 
     @ManyToOne
     @JoinColumn(name = "user_id")
+    @JsonIgnore
     private User owner;
 
     public File() {

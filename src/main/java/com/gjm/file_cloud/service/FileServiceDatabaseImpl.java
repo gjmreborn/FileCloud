@@ -10,6 +10,7 @@ import com.gjm.file_cloud.exceptions.http.NoFilesException;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
 import javax.transaction.Transactional;
@@ -58,14 +59,16 @@ public class FileServiceDatabaseImpl implements FileService {
         File fileToDelete = getFileByName(name);
 
         removeFileFromUser(fileToDelete, currentUser);
+        fileDao.delete(fileToDelete);
         userDao.save(currentUser);
     }
 
     @Override
     public File getFileByName(String name) {
+        System.out.println(name);
         String username = authenticationService.getUsernameOfLoggedInUser();
 
-        List<File> content = fileDao.findFilesByOwnerName(username, null)
+        List<File> content = fileDao.findFilesByOwnerName(username, Pageable.unpaged())
                 .getContent()
                 .stream()
                 .filter(file -> file.getName().equals(name))
@@ -81,7 +84,7 @@ public class FileServiceDatabaseImpl implements FileService {
     public List<String> getFileNames() {
         String username = authenticationService.getUsernameOfLoggedInUser();
 
-        List<String> content = fileDao.findFilesByOwnerName(username, null)
+        List<String> content = fileDao.findFilesByOwnerName(username, Pageable.unpaged())
                 .getContent()
                 .stream()
                 .map(File::getName)
@@ -94,9 +97,14 @@ public class FileServiceDatabaseImpl implements FileService {
     }
 
     @Override
+    public long getFileCount() {
+        return getFileNames().size();
+    }
+
+    @Override
     public byte[] getZippedFiles() {
         String username = authenticationService.getUsernameOfLoggedInUser();
-        List<File> files = fileDao.findFilesByOwnerName(username, null)
+        List<File> files = fileDao.findFilesByOwnerName(username, Pageable.unpaged())
                 .getContent();
 
         if(files.isEmpty()) {
@@ -122,7 +130,7 @@ public class FileServiceDatabaseImpl implements FileService {
     }
 
     private boolean fileExists(String username, String fileName) {
-        return fileDao.findFilesByOwnerName(username, null)
+        return fileDao.findFilesByOwnerName(username, Pageable.unpaged())
                 .stream()
                 .anyMatch(file -> file.getName().equals(fileName));
     }

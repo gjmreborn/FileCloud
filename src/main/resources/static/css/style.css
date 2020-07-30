@@ -1,3 +1,8 @@
+.container-center {
+    width: 75%;
+    margin: auto;
+}
+
 .center {
     width: 1000px;
     height: 500px;
