@@ -70,15 +70,10 @@
     <select />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="942c99ef-266e-49b2-9d9b-763ef5756d50" name="Default Changelist" comment="Refactored exceptions, added UserService, now Dao methods return Optionals.">
-      <change afterPath="$PROJECT_DIR$/src/main/java/com/gjm/file_cloud/service/ZipService.java" afterDir="false" />
+    <list default="true" id="942c99ef-266e-49b2-9d9b-763ef5756d50" name="Default Changelist" comment="Refactored FileServiceDatabaseImpl, added ZipService.">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/main/java/com/gjm/file_cloud/entity/Role.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/gjm/file_cloud/entity/Role.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/com/gjm/file_cloud/entity/User.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/gjm/file_cloud/entity/User.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/com/gjm/file_cloud/exceptions/http/FileDuplicationException.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/gjm/file_cloud/exceptions/http/FileAlreadyExistsException.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/com/gjm/file_cloud/exceptions/http/FilePagingException.java" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/com/gjm/file_cloud/exceptions/http/FileValidationException.java" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/com/gjm/file_cloud/service/FileServiceDatabaseImpl.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/gjm/file_cloud/service/FileServiceDatabaseImpl.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/gjm/file_cloud/service/AdministratorsManager.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/gjm/file_cloud/service/AdministratorsManager.java" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -261,7 +256,7 @@
       <workItem from="1559067856378" duration="121000" />
       <workItem from="1595713695844" duration="6388000" />
       <workItem from="1595779424750" duration="6377000" />
-      <workItem from="1595931707242" duration="14414000" />
+      <workItem from="1595931707242" duration="15841000" />
     </task>
     <task id="LOCAL-00001" summary="Removed useless Locale usages.">
       <created>1595779489569</created>
@@ -312,7 +307,14 @@
       <option name="project" value="LOCAL" />
       <updated>1596088341379</updated>
     </task>
-    <option name="localTasksCounter" value="8" />
+    <task id="LOCAL-00008" summary="Refactored FileServiceDatabaseImpl, added ZipService.">
+      <created>1596090794723</created>
+      <option name="number" value="00008" />
+      <option name="presentableId" value="LOCAL-00008" />
+      <option name="project" value="LOCAL" />
+      <updated>1596090794724</updated>
+    </task>
+    <option name="localTasksCounter" value="9" />
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">
@@ -338,7 +340,8 @@
     <MESSAGE value="Fixed minor error connected with the previous active user field." />
     <MESSAGE value="Refactored UserController and FileController. Grouped interconnected operations." />
     <MESSAGE value="Refactored exceptions, added UserService, now Dao methods return Optionals." />
-    <option name="LAST_COMMIT_MESSAGE" value="Refactored exceptions, added UserService, now Dao methods return Optionals." />
+    <MESSAGE value="Refactored FileServiceDatabaseImpl, added ZipService." />
+    <option name="LAST_COMMIT_MESSAGE" value="Refactored FileServiceDatabaseImpl, added ZipService." />
   </component>
   <component name="WindowStateProjectService">
     <state x="740" y="246" key="#com.intellij.ide.util.MemberChooser" timestamp="1595929440663">
@@ -395,10 +398,10 @@
       <screen x="1920" y="0" width="1920" height="1080" />
     </state>
     <state x="2381" y="185" key="SettingsEditor/0.0.1858.1080/1920.0.1920.1080@1920.0.1920.1080" timestamp="1595779785707" />
-    <state x="534" y="273" key="Vcs.Push.Dialog.v2" timestamp="1596088347203">
+    <state x="534" y="273" key="Vcs.Push.Dialog.v2" timestamp="1596090797905">
       <screen x="0" y="0" width="1858" height="1080" />
     </state>
-    <state x="534" y="273" key="Vcs.Push.Dialog.v2/0.0.1858.1080/-1920.0.1920.1080/1920.0.1920.1200@0.0.1858.1080" timestamp="1596088347203" />
+    <state x="534" y="273" key="Vcs.Push.Dialog.v2/0.0.1858.1080/-1920.0.1920.1080/1920.0.1920.1200@0.0.1858.1080" timestamp="1596090797905" />
     <state x="2472" y="273" key="Vcs.Push.Dialog.v2/0.0.1858.1080/1920.0.1920.1080@1920.0.1920.1080" timestamp="1595779522928" />
     <state x="534" y="273" key="Vcs.Push.Dialog.v2/0.0.1858.1080/1920.0.1920.1200/-1920.0.1920.1080@0.0.1858.1080" timestamp="1596003698411" />
     <state x="-1767" y="-14" width="1342" height="1067" maximized="true" key="dock-window-1" timestamp="1596002494186">

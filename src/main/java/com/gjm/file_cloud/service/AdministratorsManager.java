@@ -18,7 +18,7 @@ public class AdministratorsManager {
     @Value("${file_cloud.admin_name}")
     private String adminName;
 
-    @Value("${file_cloud.password}")
+    @Value("${file_cloud.admin_password}")
     private String adminPassword;
 
     private final UserDao userDao;
